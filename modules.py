@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.contrib.rnn import GRUCell
 
-def new_fc_layer(input,
+def new_fc_layer(inputs,
                  num_cells,
                  is_training = True):
     layer = tf.layers.dense(input, units = num_cells, activation = tf.nn.relu)
@@ -10,10 +10,10 @@ def new_fc_layer(input,
     layer = tf.layers.dropout(layer, rate = rate)
     return layer
 
-def prenet(input,
-           layer_sizes = [256,128],
-           is_training):
-    layer1 = new_fc_layer(input,
+def prenet(inputs,
+           is_training,
+           layer_sizes = [256,128]):
+    layer1 = new_fc_layer(inputs,
                           layer_sizes[0],
                           is_training)
     
@@ -80,7 +80,7 @@ def cbhg(input, K, is_training, input_lengths, projection_filter_sizes):
 def highwaynet(input):
     g = tf.layers.dense(inputs = input,
                         units = 128,
-                        activation = tf.nn.sigmoid
+                        activation = tf.nn.sigmoid,
                         bias_initializer = tf.constant_intializer(-1.0))
     
     r = tf.layers.dense(inputs = input,
